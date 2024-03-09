@@ -15,6 +15,7 @@ export const ProfilePage = () => {
     // Define the function to make the API call
     const fetchData = async () => {
       try {
+        setLoading(true);
         const res = await fetch(deviceActivationUrl, {
           method: 'POST',
           headers: {
@@ -29,6 +30,8 @@ export const ProfilePage = () => {
         setSerialData(result.serial);
       } catch (error) {
         console.error('Error:', error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -44,37 +47,47 @@ export const ProfilePage = () => {
   }
 
   const activateDevice = async () => {
-    setLoading(true);
-    const res = await fetch(deviceActivationUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "serial": serialDataInput, "email": user.email }),
-    });
-    setLoading(false);
-    if (res.ok) {
-      setSerialData(serialDataInput);
-    } else {
-      throw new Error('Failed to Activate');
+    try {
+      setLoading(true);
+      const res = await fetch(deviceActivationUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "serial": serialDataInput, "email": user.email }),
+      });
+      if (res.ok) {
+        setSerialData(serialDataInput);
+      } else {
+        throw new Error('Failed to Activate');
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const deactivateDevice = async () => {
-    setLoading(true);
-    const res = await fetch(deviceActivationUrl, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "email": user.email }),
-    });
-    setLoading(false);
-    if (res.ok) {
-      setSerialData("");
-      setSerialDataInput("");
-    } else {
-      throw new Error('Failed to Deactivate');
+    try {
+      setLoading(true);
+      const res = await fetch(deviceActivationUrl, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "serial": serialData, "email": user.email }),
+      });
+      if (res.ok) {
+        setSerialData("");
+        setSerialDataInput("");
+      } else {
+        throw new Error('Failed to Deactivate');
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
