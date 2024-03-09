@@ -1,0 +1,23 @@
+.loader {
+  height: 5rem;
+  width: 5rem;
+  margin: auto;
+
+  animation: spin 2s infinite linear;
+}
+
+.loader-container {
+  position: absolute;
+  width: 100%;
+  left: 0px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
